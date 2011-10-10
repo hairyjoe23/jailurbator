@@ -9,6 +9,8 @@
 
 #include "settingspage.h"
 
+#include <QScopedPointer>
+
 class SubredditModel;
 class Ui_SubredditSettingsPage;
 
@@ -25,7 +27,7 @@ public:
   void Save();
 
 private:
-  Ui_SubredditSettingsPage* ui_;
+  QScopedPointer<Ui_SubredditSettingsPage> ui_;
 
   SubredditModel* model_;
   QSortFilterProxyModel* proxy_;

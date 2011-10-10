@@ -33,24 +33,14 @@ private slots:
 
   void RecreateModel();
 
-  void Love(bool on);
-
 private:
-  QIcon LoadIcon(const QString& name) const;
-
   void SelectNext(int d);
-
-  QString SaveCurrentImage(const QUrl& url) const;
 
 private:
   Application* app_;
   QScopedPointer<Ui_MainWindow> ui_;
 
   QScopedPointer<RedditModel> model_;
-
-  QString loved_folder_;
-  QString findimages_js_source_;
-  Image current_image_;
 };
 
 #endif // MAINWINDOW_H

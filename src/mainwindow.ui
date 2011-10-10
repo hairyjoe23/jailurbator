@@ -153,55 +153,13 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QFrame" name="web_frame">
+       <widget class="ImageState" name="image_state">
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
         </property>
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <property name="margin">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QToolButton" name="love">
-           <property name="iconSize">
-            <size>
-             <width>22</width>
-             <height>22</height>
-            </size>
-           </property>
-           <property name="autoRaise">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="score">
-           <property name="textFormat">
-            <enum>Qt::PlainText</enum>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="subreddit">
-           <property name="textFormat">
-            <enum>Qt::PlainText</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="title">
-           <property name="textFormat">
-            <enum>Qt::PlainText</enum>
-           </property>
-          </widget>
-         </item>
-        </layout>
        </widget>
       </item>
       <item>
@@ -234,20 +192,6 @@
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="action_love">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Love</string>
-   </property>
-   <property name="toolTip">
-    <string>Love</string>
-   </property>
-   <property name="shortcut">
-    <string>S</string>
-   </property>
-  </action>
   <action name="action_settings">
    <property name="icon">
     <iconset resource="../data/data.qrc">
@@ -283,6 +227,12 @@
    <class>SmoothScrollingListView</class>
    <extends>QListView</extends>
    <header>smoothscrollinglistview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ImageState</class>
+   <extends>QFrame</extends>
+   <header>imagestate.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

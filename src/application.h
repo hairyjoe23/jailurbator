@@ -12,6 +12,7 @@
 #include <QObject>
 
 class Database;
+class IconLoader;
 class ImageBackend;
 
 class Application : public QObject {
@@ -23,6 +24,7 @@ public:
 
   // Things that are created on startup.
   Database* database() const { return database_; }
+  IconLoader* icon_loader() const { return icon_loader_; }
   ImageBackend* image_backend() const { return image_backend_; }
 
   // Things that are created lazily.
@@ -37,6 +39,7 @@ signals:
 
 private:
   Database* database_;
+  IconLoader* icon_loader_;
   ImageBackend* image_backend_;
   SettingsDialog* settings_dialog_;
 };

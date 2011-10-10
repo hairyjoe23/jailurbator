@@ -18,7 +18,7 @@
 #include <QStringList>
 #include <QVariant>
 
-const int Database::kSchemaVersion = 0;
+const int Database::kSchemaVersion = 1;
 
 
 Database::Database(QObject* parent, const QString& filename)

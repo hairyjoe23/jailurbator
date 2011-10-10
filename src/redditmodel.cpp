@@ -6,6 +6,7 @@
 
 #include "application.h"
 #include "closure.h"
+#include "imagebackend.h"
 #include "network.h"
 #include "redditmodel.h"
 
@@ -42,6 +43,7 @@ RedditModel::RedditModel(const QStringList& reddits, Application* app,
     is_loading_more_(false),
     no_more_links_(false),
     show_self_posts_(false),
+    show_viewed_images_(false),
     preload_next_(kDefaultPreloadNext),
     max_preloaded_pages_(kDefaultMaxPreloadedPages)
 {
@@ -149,8 +151,8 @@ void RedditModel::fetchMore(const QModelIndex& parent) {
 
   // Construct the URL
   QUrl url(QString(kUrl).arg(reddits_.join("+")));
-  if (!links_.isEmpty()) {
-    url.addQueryItem("after", links_.last().image_.reddit_name());
+  if (!last_seen_name_.isEmpty()) {
+    url.addQueryItem("after", last_seen_name_);
   }
 
   qLog(Debug) << "Fetching links" << url;
@@ -185,6 +187,11 @@ void RedditModel::FetchMoreFinished(QNetworkReply* reply) {
 
   QVariantList links = data["data"].toMap()["children"].toList();
 
+  if (links.isEmpty()) {
+    no_more_links_ = true;
+    return;
+  }
+
   QList<Link> new_links;
   int row = links_.count();
   foreach (const QVariant& link_variant, links) {
@@ -194,15 +201,27 @@ void RedditModel::FetchMoreFinished(QNetworkReply* reply) {
 
     link_data = link_data["data"].toMap();
 
+    Image image;
+    image.InitFromJson(link_data);
+
+    // Update the last seen name - this must be done before skipping anything
+    // for the case that we skip all the images in this set.
+    last_seen_name_ = image.reddit_name();
+
     // Skip self posts
     if (!show_self_posts_ && link_data["is_self"].toBool())
       continue;
 
-    // Create a Link object
-    Image image;
-    image.InitFromJson(link_data);
+    // Check if this image has been viewed before
+    if (app_->image_backend()->FindImage(image, &image)) {
+      if (image.is_viewed() && !show_viewed_images_)
+        continue;
+    }
+
+    // Adjust the URL to get just the image if we can.
     image.set_reddit_url(ResolveUrl(image.reddit_url()));
 
+    // Create a Link object
     new_links << Link(image);
 
     // Start fetching the thumbnail
@@ -216,11 +235,6 @@ void RedditModel::FetchMoreFinished(QNetworkReply* reply) {
     }
 
     row ++;
-  }
-
-  if (new_links.isEmpty()) {
-    no_more_links_ = true;
-    return;
   }
 
   // Insert the rows into the model
@@ -327,6 +341,7 @@ void RedditModel::ReloadSettings() {
   s.beginGroup(kSettingsGroup);
 
   show_self_posts_ = s.value("show_self_posts", false).toBool();
+  show_viewed_images_ = s.value("show_viewed_images", false).toBool();
   preload_next_ = s.value("preload_next", kDefaultPreloadNext).toInt();
   max_preloaded_pages_ = s.value("max_preloaded_pages", kDefaultMaxPreloadedPages).toInt();
   qint64 cache_size = s.value("cache_size", 100).toInt();

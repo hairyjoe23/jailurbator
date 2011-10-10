@@ -21,7 +21,6 @@ BrowsingSettingsPage::BrowsingSettingsPage(SettingsDialog* dialog)
 }
 
 BrowsingSettingsPage::~BrowsingSettingsPage() {
-  delete ui_;
 }
 
 void BrowsingSettingsPage::Load() {
@@ -29,6 +28,7 @@ void BrowsingSettingsPage::Load() {
   s.beginGroup(RedditModel::kSettingsGroup);
 
   ui_->show_self->setChecked(s.value("show_self_posts", false).toBool());
+  ui_->show_viewed->setChecked(s.value("show_viewed_images", false).toBool());
   ui_->preload_next->setValue(s.value("preload_next", RedditModel::kDefaultPreloadNext).toInt());
   ui_->max_preloaded_pages->setValue(s.value("max_preloaded_pages", RedditModel::kDefaultMaxPreloadedPages).toInt());
   ui_->cache_size->setValue(s.value("cache_size", 100).toInt());
@@ -41,6 +41,7 @@ void BrowsingSettingsPage::Save() {
   s.beginGroup(RedditModel::kSettingsGroup);
 
   s.setValue("show_self_posts",ui_->show_self->isChecked());
+  s.setValue("show_viewed_images", ui_->show_viewed->isChecked());
   s.setValue("preload_next", ui_->preload_next->value());
   s.setValue("max_preloaded_pages", ui_->max_preloaded_pages->value());
   s.setValue("cache_size", ui_->cache_size->value());

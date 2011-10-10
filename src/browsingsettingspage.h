@@ -9,6 +9,8 @@
 
 #include "settingspage.h"
 
+#include <QScopedPointer>
+
 class Ui_BrowsingSettingsPage;
 
 class BrowsingSettingsPage : public SettingsPage {
@@ -25,7 +27,7 @@ private slots:
   void BrowseLoved();
 
 private:
-  Ui_BrowsingSettingsPage* ui_;
+  QScopedPointer<Ui_BrowsingSettingsPage> ui_;
 };
 
 #endif // BROWSINGSETTINGSPAGE_H

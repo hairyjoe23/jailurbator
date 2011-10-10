@@ -23,7 +23,6 @@ SubredditSettingsPage::SubredditSettingsPage(SettingsDialog* dialog)
 }
 
 SubredditSettingsPage::~SubredditSettingsPage() {
-  delete ui_;
 }
 
 void SubredditSettingsPage::Load() {

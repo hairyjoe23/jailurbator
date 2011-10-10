@@ -28,7 +28,7 @@ const QStringList Image::kColumns = QStringList()
     << "reddit_author" << "reddit_created" << "reddit_domain" << "reddit_link"
     << "reddit_name" << "reddit_score" << "reddit_subreddit" << "reddit_title"
     << "reddit_thumbnail_url" << "reddit_url" << "saved_time" << "filename"
-    << "is_loved";
+    << "is_loved" << "is_viewed" << "first_viewed_time";
 
 const QString Image::kColumnSpec = Image::kColumns.join(", ");
 const QString Image::kBindSpec = Prepend(":", Image::kColumns).join(", ");
@@ -39,7 +39,9 @@ ImageData::ImageData()
   : reddit_created_(0),
     reddit_score_(0),
     saved_time_(0),
-    is_loved_(false)
+    is_loved_(false),
+    is_viewed_(false),
+    first_viewed_time_(0)
 {
 }
 
@@ -80,6 +82,8 @@ void Image::InitFromQuery(const QSqlQuery& query) {
   d->saved_time_ = query.value(10).toUInt();
   d->filename_ = query.value(11).toString();
   d->is_loved_ = query.value(12).toBool();
+  d->is_viewed_ = query.value(13).toBool();
+  d->first_viewed_time_ = query.value(14).toUInt();
 }
 
 void Image::BindToQuery(QSqlQuery* query) const {
@@ -99,6 +103,8 @@ void Image::BindToQuery(QSqlQuery* query) const {
   BIND(saved_time);
   BIND(filename);
   BIND(is_loved);
+  BIND(is_viewed);
+  BIND(first_viewed_time);
 
 #undef BIND
 }

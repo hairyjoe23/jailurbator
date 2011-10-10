@@ -9,6 +9,7 @@
 
 #include <QDialog>
 #include <QMap>
+#include <QScopedPointer>
 
 class SettingsPage;
 class Ui_SettingsDialog;
@@ -51,7 +52,7 @@ private:
   void AddPage(Page id, SettingsPage* page);
 
 private:
-  Ui_SettingsDialog* ui_;
+  QScopedPointer<Ui_SettingsDialog> ui_;
   bool loading_settings_;
 
   QMap<Page, PageData> pages_;

@@ -93,9 +93,11 @@ private:
   bool no_more_links_;
   QList<Link> links_;
   QList<int> mru_pages_;
+  QString last_seen_name_;
 
   // Options.
   bool show_self_posts_;
+  bool show_viewed_images_;
   int preload_next_;
   int max_preloaded_pages_;
 };

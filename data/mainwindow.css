@@ -2,7 +2,7 @@
   background: %palette-base;
 }
 
-#list_frame, #web_frame {
+#list_frame, #image_state {
   border-top: 0px;
   border-left: 0px;
   border-bottom: 1px solid %palette-midlight;
@@ -13,7 +13,7 @@
   border-right: 1px solid %palette-midlight;
 }
 
-#web_frame {
+#image_state {
   border-right: 0px;
 }
 

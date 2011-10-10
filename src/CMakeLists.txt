@@ -11,9 +11,11 @@ set(SOURCES
   browsingsettingspage.cpp
   closure.cpp
   database.cpp
+  iconloader.cpp
   image.cpp
   imagebackend.cpp
   imagelistdelegate.cpp
+  imagestate.cpp
   logging.cpp
   main.cpp
   mainwindow.cpp
@@ -35,6 +37,7 @@ set(HEADERS
   browsingsettingspage.h
   closure.h
   database.h
+  imagestate.h
   mainwindow.h
   network.h
   redditloginsettingspage.h
@@ -48,6 +51,7 @@ set(HEADERS
 
 set(UI
   browsingsettingspage.ui
+  imagestate.ui
   mainwindow.ui
   redditloginsettingspage.ui
   settingsdialog.ui

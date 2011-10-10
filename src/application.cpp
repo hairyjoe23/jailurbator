@@ -6,10 +6,12 @@
 
 #include "application.h"
 #include "database.h"
+#include "iconloader.h"
 #include "imagebackend.h"
 
 Application::Application()
   : database_(new Database),
+    icon_loader_(new IconLoader),
     image_backend_(new ImageBackend(database_)),
     settings_dialog_(NULL)
 {

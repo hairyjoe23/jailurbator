@@ -40,7 +40,6 @@ SettingsDialog::SettingsDialog(QWidget* parent)
 }
 
 SettingsDialog::~SettingsDialog() {
-  delete ui_;
 }
 
 void SettingsDialog::AddPage(Page id, SettingsPage* page) {

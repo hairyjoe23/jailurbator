@@ -34,6 +34,8 @@ public:
   uint saved_time_;
   QString filename_;
   bool is_loved_;
+  bool is_viewed_;
+  uint first_viewed_time_;
 };
 
 
@@ -65,6 +67,8 @@ public:
   QDateTime saved_time() const { return QDateTime::fromTime_t(d->saved_time_); }
   QString filename() const { return d->filename_; }
   bool is_loved() const { return d->is_loved_; }
+  bool is_viewed() const { return d->is_viewed_; }
+  QDateTime first_viewed_time() const { return QDateTime::fromTime_t(d->first_viewed_time_); }
 
   // Simple setters
   void set_reddit_author(const QString& v) { d->reddit_author_ = v; }
@@ -80,6 +84,8 @@ public:
   void set_saved_time(const QDateTime& v) { d->saved_time_ = v.toTime_t(); }
   void set_filename(const QString& v) { d->filename_ = v; }
   void set_loved(bool v) { d->is_loved_ = v; }
+  void set_viewed(bool v) { d->is_viewed_ = v; }
+  void set_first_viewed_time(const QDateTime& v) { d->first_viewed_time_ = v.toTime_t(); }
 
   // Two images are equal if they are in the same subreddit and have the same
   // full name.
