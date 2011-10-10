@@ -13,6 +13,7 @@
         <file>icons/normal/reload.png</file>
         <file>icons/normal/search.png</file>
         <file>findimages.js</file>
-        <file>schema/1.sql</file>
+        <file>icons/active/screen.png</file>
+        <file>icons/normal/screen.png</file>
     </qresource>
 </RCC>

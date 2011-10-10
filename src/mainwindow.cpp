@@ -5,9 +5,12 @@
  * http://sam.zoy.org/wtfpl/COPYING for more details. */
 
 #include "application.h"
+#include "iconloader.h"
 #include "imagelistdelegate.h"
 #include "logging.h"
 #include "mainwindow.h"
+#include "minemodel.h"
+#include "minelistdelegate.h"
 #include "redditmodel.h"
 #include "stylesheetloader.h"
 #include "subredditmodel.h"
@@ -19,10 +22,12 @@
 MainWindow::MainWindow(Application* app, QWidget* parent)
   : QMainWindow(parent),
     app_(app),
-    ui_(new Ui_MainWindow)
+    ui_(new Ui_MainWindow),
+    mode_menu_(new QMenu(this))
 {
   ui_->setupUi(this);
   ui_->list->setItemDelegate(new ImageListDelegate(this));
+  ui_->mine->setItemDelegate(new MineListDelegate(this));
 
   statusBar()->hide();
   menuBar()->hide();
@@ -33,9 +38,23 @@ MainWindow::MainWindow(Application* app, QWidget* parent)
   StyleSheetLoader* loader = new StyleSheetLoader(this);
   loader->SetStyleSheet(this, ":/mainwindow.css");
 
+  // Load icons
+  ui_->mode->setIcon(app_->icon_loader()->LoadIcon("screen"));
+
   // Create actions
   ui_->settings->setDefaultAction(ui_->action_settings);
   ui_->refresh->setDefaultAction(ui_->action_refresh);
+
+  // Mode menu
+  QActionGroup* mode_actions = new QActionGroup(this);
+  mode_actions->addAction(ui_->action_mode_reddit);
+  mode_actions->addAction(ui_->action_mode_mine);
+
+  mode_menu_->addActions(mode_actions->actions());
+  ui_->mode->setMenu(mode_menu_);
+
+  RedditMode();
+  ui_->action_mode_reddit->setChecked(true);
 
   // Set webkit global attributes
   QWebSettings* web_settings = QWebSettings::globalSettings();
@@ -49,6 +68,8 @@ MainWindow::MainWindow(Application* app, QWidget* parent)
           app_, SLOT(ShowSettingsDialog()));
   connect(app_, SIGNAL(SettingsChanged()), SLOT(ReloadSettings()));
   connect(ui_->action_refresh, SIGNAL(triggered()), SLOT(RecreateModel()));
+  connect(ui_->action_mode_mine, SIGNAL(triggered()), SLOT(MineMode()));
+  connect(ui_->action_mode_reddit, SIGNAL(triggered()), SLOT(RedditMode()));
 
   ReloadSettings();
 }
@@ -80,9 +101,9 @@ void MainWindow::RecreateModel() {
       s.value("subscribed_subreddits", SubredditModel::default_subreddits()).toStringList();
 
   // Recreate the model.
-  model_.reset(new RedditModel(subscribed_subreddits, app_));
+  reddit_model_.reset(new RedditModel(subscribed_subreddits, app_));
 
-  ui_->list->setModel(model_.data());
+  ui_->list->setModel(reddit_model_.data());
   connect(ui_->list->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
           SLOT(LinkSelected()));
 }
@@ -118,4 +139,52 @@ void MainWindow::SelectNext(int d) {
   ui_->list->selectionModel()->setCurrentIndex(
         index.sibling(qBound(0, row, ui_->list->model()->rowCount()), 0),
         QItemSelectionModel::ClearAndSelect);
+}
+
+void MainWindow::RedditMode() {
+  ui_->list_stack->setCurrentWidget(ui_->list_reddit_page);
+  ui_->content_stack->setCurrentWidget(ui_->content_reddit_page);
+
+  const QSize max_size = ui_->list_stack->currentWidget()->maximumSize();
+  ui_->list_stack->setMaximumSize(max_size);
+  ui_->list_frame->setMaximumSize(max_size);
+}
+
+void MainWindow::MineMode() {
+  mine_model_.reset(new MineModel(app_));
+  ui_->mine->setModel(mine_model_.data());
+
+  connect(ui_->mine->selectionModel(),
+          SIGNAL(currentChanged(QModelIndex,QModelIndex)),
+          SLOT(MineSelected()));
+
+  ui_->list_stack->setCurrentWidget(ui_->list_mine_page);
+  ui_->content_stack->setCurrentWidget(ui_->content_mine_page);
+
+  const QSize max_size = ui_->list_stack->currentWidget()->maximumSize();
+  ui_->list_stack->setMaximumSize(max_size);
+  ui_->list_frame->setMaximumSize(max_size);
+}
+
+void MainWindow::MineSelected() {
+  const Image image = ui_->mine->currentIndex().data(MineModel::Role_Image).value<Image>();
+
+  QPixmap pixmap;
+
+  const QString cache_key = image.unique_id() +
+                            QString::number(ui_->content->width()) +
+                            QString::number(ui_->content->height());
+
+  if (!mine_cache_.find(cache_key, &pixmap)) {
+    // Load the pixmap
+    if (pixmap.load(image.filename())) {
+      pixmap = pixmap.scaled(ui_->content->size(), Qt::KeepAspectRatio,
+                             Qt::SmoothTransformation);
+      mine_cache_.insert(cache_key, pixmap);
+    } else {
+      return;
+    }
+  }
+
+  ui_->content->setPixmap(pixmap);
 }

@@ -10,10 +10,12 @@
 #include "image.h"
 
 #include <QMainWindow>
+#include <QPixmapCache>
 #include <QScopedPointer>
 #include <QUrl>
 
 class Application;
+class MineModel;
 class RedditModel;
 class Ui_MainWindow;
 
@@ -30,8 +32,12 @@ public:
 private slots:
   void ReloadSettings();
   void LinkSelected();
+  void MineSelected();
 
   void RecreateModel();
+
+  void RedditMode();
+  void MineMode();
 
 private:
   void SelectNext(int d);
@@ -40,7 +46,12 @@ private:
   Application* app_;
   QScopedPointer<Ui_MainWindow> ui_;
 
-  QScopedPointer<RedditModel> model_;
+  QScopedPointer<RedditModel> reddit_model_;
+  QScopedPointer<MineModel> mine_model_;
+
+  QMenu* mode_menu_;
+
+  QPixmapCache mine_cache_;
 };
 
 #endif // MAINWINDOW_H

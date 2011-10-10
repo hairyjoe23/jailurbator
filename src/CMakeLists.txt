@@ -19,6 +19,8 @@ set(SOURCES
   logging.cpp
   main.cpp
   mainwindow.cpp
+  minelistdelegate.cpp
+  minemodel.cpp
   network.cpp
   redditloginsettingspage.cpp
   redditmodel.cpp
@@ -39,6 +41,7 @@ set(HEADERS
   database.h
   imagestate.h
   mainwindow.h
+  minemodel.h
   network.h
   redditloginsettingspage.h
   redditmodel.h

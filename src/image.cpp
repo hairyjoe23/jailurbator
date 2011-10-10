@@ -109,9 +109,12 @@ void Image::BindToQuery(QSqlQuery* query) const {
 #undef BIND
 }
 
+QString Image::unique_id() const {
+  return reddit_name() + reddit_subreddit();
+}
+
 bool Image::operator ==(const Image& other) const {
-  return reddit_name() == other.reddit_name() &&
-         reddit_subreddit() == other.reddit_subreddit();
+  return unique_id() == other.unique_id();
 }
 
 Image::operator bool() const {

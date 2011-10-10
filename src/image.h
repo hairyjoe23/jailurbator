@@ -87,6 +87,8 @@ public:
   void set_viewed(bool v) { d->is_viewed_ = v; }
   void set_first_viewed_time(const QDateTime& v) { d->first_viewed_time_ = v.toTime_t(); }
 
+  QString unique_id() const;
+
   // Two images are equal if they are in the same subreddit and have the same
   // full name.
   bool operator ==(const Image& other) const;

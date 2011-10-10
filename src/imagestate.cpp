@@ -112,6 +112,7 @@ void ImageState::Love(bool on) {
 
     // Save it
     if (!url.isEmpty()) {
+      current_image_.set_saved_time(QDateTime::currentDateTime());
       current_image_.set_filename(SaveCurrentImage(QUrl(url)));
     }
   }

@@ -40,7 +40,7 @@ RedditModel::RedditModel(const QStringList& reddits, Application* app,
     reddits_(reddits),
     no_image_(QPixmap::fromImage(ScaleAndPad(QImage(":/noimage.png")))),
     network_(new NetworkAccessManager(this)),
-    is_loading_more_(false),
+    is_fetching_more_(false),
     no_more_links_(false),
     show_self_posts_(false),
     show_viewed_images_(false),
@@ -128,7 +128,7 @@ bool RedditModel::canFetchMore(const QModelIndex& parent) const {
     return false;
   if (reddits_.isEmpty())
     return false;
-  return !no_more_links_ && !is_loading_more_;
+  return !no_more_links_ && !is_fetching_more_;
 }
 
 QModelIndex RedditModel::index(int row, int column, const QModelIndex& parent) const {
@@ -144,10 +144,10 @@ QModelIndex RedditModel::parent(const QModelIndex& child) const {
 void RedditModel::fetchMore(const QModelIndex& parent) {
   if (parent.isValid())
     return;
-  if (is_loading_more_)
+  if (is_fetching_more_)
     return;
 
-  is_loading_more_ = true;
+  is_fetching_more_ = true;
 
   // Construct the URL
   QUrl url(QString(kUrl).arg(reddits_.join("+")));
@@ -168,7 +168,7 @@ void RedditModel::fetchMore(const QModelIndex& parent) {
 }
 
 void RedditModel::FetchMoreFinished(QNetworkReply* reply) {
-  is_loading_more_ = false;
+  is_fetching_more_ = false;
 
   if (reply->error() != QNetworkReply::NoError) {
     qLog(Warning) << "Error fetching links" << reply->url();
