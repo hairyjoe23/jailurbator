@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>noimage.png</file>
+        <file>mainwindow.css</file>
+        <file>schema/0.sql</file>
+        <file>icons/active/heart.png</file>
+        <file>icons/normal/heart.png</file>
+        <file>icons/normal/globe.png</file>
+        <file>icon.png</file>
+        <file>icons/normal/configuration.png</file>
+        <file>topreddits.json</file>
+        <file>busyindicator.gif</file>
+        <file>icons/normal/reload.png</file>
+        <file>icons/normal/search.png</file>
+        <file>findimages.js</file>
+    </qresource>
+</RCC>

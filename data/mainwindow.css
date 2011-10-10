@@ -1,0 +1,33 @@
+#web_page {
+  background: %palette-base;
+}
+
+#list_frame, #web_frame {
+  border-top: 0px;
+  border-left: 0px;
+  border-bottom: 1px solid %palette-midlight;
+  padding: 3px;
+}
+
+#list_frame {
+  border-right: 1px solid %palette-midlight;
+}
+
+#web_frame {
+  border-right: 0px;
+}
+
+QLabel#score {
+  color: gray;
+  font-weight: bold;
+  max-width: 40px;
+}
+
+QLabel#subreddit {
+  color: gray;
+  max-width: 80px;
+}
+
+QLabel#title {
+  font-weight: bold;
+}
